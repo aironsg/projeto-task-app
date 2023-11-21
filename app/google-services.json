@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "550358361501",
+    "project_id": "task-app-57ccd",
+    "storage_bucket": "task-app-57ccd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550358361501:android:dc0610eb84bced2ecabb74",
+        "android_client_info": {
+          "package_name": "br.com.devairon.taskapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuERqjLo1IdKlYsidahB4WDJHpe5P7Daw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

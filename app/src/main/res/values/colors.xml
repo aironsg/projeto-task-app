@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="color_default">#03B6FC</color>
+    <color name="my_light_primary">#03B6FC</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#D10B0B</color>
+    <color name="color_status_done">#009688</color>
+    <color name="color_status_todo">#FF841A</color>
+</resources>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@drawable/bg_botton_sheet">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txtTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_title_warning"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:layout_marginVertical="16dp"
+        android:textColor="@color/color_default"
+        android:textStyle="bold"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?actionBarDivider"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txtInformation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="descrição da mensagem"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:layout_marginVertical="16dp"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:layout_weight="1"
+            android:backgroundTint="@color/red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/txt_button_cancel_warning"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOK"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/txt_button_confirmation_warning"/>
+    </LinearLayout>
+
+</LinearLayout>

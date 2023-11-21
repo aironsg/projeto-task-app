@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fragment Login -->
+    <string name="text_email">E-mail</string>
+    <string name="text_password">Senha</string>
+    <string name="text_button_login">LOGIN</string>
+    <string name="text_button_register">CRIAR CONTA</string>
+    <string name="hint_email">digite seu e-mail</string>
+    <string name="hint_password">digite sua senha</string>
+
+    <!-- Fragment recover account -->
+    <string name="information_recover_account">Informe seu email de cadastro para recuperação da conta</string>
+    <string name="txt_btn_recover_account">Recuperar Conta</string>
+
+    <!-- Status Tabs -->
+    <string name="status_task_todo">A Fazer</string>
+    <string name="status_task_doing">Fazendo</string>
+    <string name="status_task_done">Feitas</string>
+    <string name="txt_description">Descrição</string>
+    <string name="txt_status">Status</string>
+    <string name="hint_description">Criar nova tela de login</string>
+    <string name="txt_btn_save">Salvar</string>
+    <!-- Bottom Sheet -->
+    <string name="txt_title_warning">Atenção</string>
+    <string name="txt_button_confirmation_warning">ENTENDI</string>
+    <string name="txt_message_button_sheet">Message</string>
+    <string name="txt_recover_account">Recuperação de Conta</string>
+    <string name="txt_completed">Concluída</string>
+    <string name="txt_doing">Fazendo</string>
+    <string name="txt_to_do">A Fazer</string>
+    <string name="txt_new_task">Nova Tarefa</string>
+    <string name="txt_create_account">Criar Conta</string>
+    <string name="txt_add_new_task">Adicionar Nova tarefa</string>
+</resources>

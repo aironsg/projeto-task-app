@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.auth.RegisterFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_default">
+
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:navigationIcon="@drawable/ic_arrow_back">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/txt_create_account"
+                    android:textColor="@color/white" />
+            </com.google.android.material.appbar.MaterialToolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="32dp">
+
+            <TextView
+                style="@style/textEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/text_email"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/edit_register_email"
+                style="@style/editTextTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
+                android:autofillHints="@string/hint_email" />
+
+            <TextView
+                style="@style/textEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/text_password"
+                android:textColor="@color/white" />
+
+            <EditText
+                android:id="@+id/edit_register_password"
+                style="@style/editTextTheme"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword"
+                android:autofillHints="@string/hint_password" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCreateAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:layout_marginBottom="10dp"
+                style="@style/ButtonTheme"
+                android:text="@string/text_button_register"
+                app:backgroundTint="@null" />
+
+
+            <ProgressBar
+                android:id="@+id/progressBarRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:indeterminateTint="@color/white"
+                android:visibility="invisible"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
