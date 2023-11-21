@@ -1,9 +1,6 @@
 package br.com.devairon.taskapp.ui.auth
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,17 +9,14 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import br.com.devairon.taskapp.R
 import br.com.devairon.taskapp.databinding.FragmentLoginBinding
-import br.com.devairon.taskapp.databinding.FragmentSplashBinding
+import br.com.devairon.taskapp.ui.BaseFragment
+import br.com.devairon.taskapp.utils.FirebaseHelper
 import br.com.devairon.taskapp.utils.extension.showBottomSheet
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 
-class LoginFragment : Fragment() {
+class LoginFragment : BaseFragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +30,6 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        auth = Firebase.auth
         initListener()
     }
 
@@ -55,13 +48,13 @@ class LoginFragment : Fragment() {
     }
 
 
-
     private fun validateData() {
         val email = binding.editEmail.text.toString().trim()
         val password = binding.editPassword.text.toString().trim()
 
         if (email.isNotBlank()) {
             if (password.isNotBlank()) {
+                hideKeyboard()
                 binding.progressBarLogin.isVisible = true
                 loginUser(email, password)
 
@@ -75,17 +68,14 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginUser(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
+        FirebaseHelper.getAuth().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     findNavController().navigate(R.id.action_global_homeFragment)
                     Toast.makeText(requireContext(), "Login Success", Toast.LENGTH_SHORT).show()
                 } else {
                     binding.progressBarLogin.isVisible = false
-                    Toast.makeText(
-                        requireContext(),
-                        "Authentication failed. ${task.exception?.message}", Toast.LENGTH_SHORT
-                    ).show()
+                    showBottomSheet(message = getString(FirebaseHelper.validateError(task.exception?.message.toString())))
                 }
             }
     }

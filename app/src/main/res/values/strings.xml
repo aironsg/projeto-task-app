@@ -28,6 +28,7 @@
     <string name="hint_description">Criar nova tela de login</string>
     <string name="txt_btn_save">Salvar</string>
     <string name="txt_save_task">Tarefa Salva com sucesso!</string>
+    <string name="txt_update_task">Tarefa Atualizada com sucesso!</string>
     <string name="txt_toolbar_update_task">Edição de Tarefa</string>
 
     <!-- Generic -->
@@ -43,6 +44,14 @@
     <string name="txt_load_tasks">Carregando Tarefas, aguarde...</string>
     <string name="txt_delete_tasks_success">Tarefa deletada com sucesso.</string>
     <string name="txt_delete_tasks_error">Erro! Tarefa não deletada</string>
+
+    <!-- errors Firebase Authentication -->
+    <string name="txt_account_not_registered_register_fragment">Error! Credenciais inválida, verifique email ou senha.</string>
+    <string name="txt_invalid_email_register_fragment">Insira um e-mail válido.</string>
+    <string name="txt_invalid_password_register_fragment">Senha inválida, tente novamente.</string>
+    <string name="txt_email_in_use_register_fragment">Este e-mail já está em uso.</string>
+    <string name="txt_strong_password_register_fragment">Insira uma senha mais forte.</string>
+
 
 
 
