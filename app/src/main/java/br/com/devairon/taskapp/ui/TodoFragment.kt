@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.devairon.taskapp.R
@@ -31,6 +32,7 @@ class TodoFragment : Fragment() {
     private lateinit var taskAdapter: TaskAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var reference: DatabaseReference
+    private  val viewModel : TaskViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +56,26 @@ class TodoFragment : Fragment() {
         binding.fabAdd.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToFormTaskFragment(null)
             findNavController().navigate(action)
+        }
+
+        observerViewModel()
+    }
+
+    private fun observerViewModel() {
+        viewModel.taskUpdate.observe(viewLifecycleOwner){ updateTask ->
+            if (updateTask.status == Status.TODO){
+
+                val oldList = taskAdapter.currentList
+
+                val newList = oldList.toMutableList().apply {
+                    find { it.id == updateTask.id }?.description = updateTask.description
+                }
+
+                val position = newList.indexOfFirst { it.id == updateTask.id }
+
+                taskAdapter.submitList(newList)
+                taskAdapter.notifyItemChanged(position)
+            }
         }
     }
 
