@@ -17,6 +17,7 @@ import br.com.devairon.taskapp.data.model.Status
 import br.com.devairon.taskapp.data.model.Task
 import br.com.devairon.taskapp.databinding.FragmentTodoBinding
 import br.com.devairon.taskapp.ui.adapter.TaskAdapter
+import br.com.devairon.taskapp.utils.StateView
 import br.com.devairon.taskapp.utils.extension.showBottomSheet
 
 class TodoFragment : Fragment() {
@@ -52,10 +53,23 @@ class TodoFragment : Fragment() {
     }
 
     private fun observerViewModel() {
-        viewModel.taskList.observe(viewLifecycleOwner) { taskList ->
-            binding.progressBar.isVisible = false
-            tasksListEmpty(taskList)
-            taskAdapter.submitList(taskList)
+        viewModel.taskList.observe(viewLifecycleOwner) { stateView ->
+           when(stateView){
+               is StateView.onLoading ->{
+                   binding.progressBar.isVisible = true
+               }
+               is StateView.onSuccess -> {
+                   binding.progressBar.isVisible = false
+                   tasksListEmpty(stateView.data ?: emptyList() )
+                   taskAdapter.submitList(stateView.data)
+               }
+               is StateView.onError -> {
+                   Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
+                   binding.progressBar.isVisible = false
+
+
+               }
+           }
         }
         viewModel.taskInsert.observe(viewLifecycleOwner) { task ->
             if (task.status == Status.TODO) {
