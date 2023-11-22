@@ -13,7 +13,6 @@ import br.com.devairon.taskapp.R
 import br.com.devairon.taskapp.data.model.Status
 import br.com.devairon.taskapp.data.model.Task
 import br.com.devairon.taskapp.databinding.FragmentFormTaskBinding
-import br.com.devairon.taskapp.utils.FirebaseHelper
 import br.com.devairon.taskapp.utils.extension.initToolbar
 import br.com.devairon.taskapp.utils.extension.showBottomSheet
 
@@ -26,7 +25,7 @@ class FormTaskFragment : BaseFragment() {
     private var newTask: Boolean = true
 
     private val args: FormTaskFragmentArgs by navArgs()
-    private  val viewModel : TaskViewModel by activityViewModels()
+    private val viewModel: TaskViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -54,7 +53,10 @@ class FormTaskFragment : BaseFragment() {
     }
 
     private fun initListener() {
-        binding.btnSave.setOnClickListener { validateData() }
+        binding.btnSave.setOnClickListener {
+            observerViewModel()
+            validateData()
+        }
 
         binding.rgStatus.setOnCheckedChangeListener { _, id ->
             status = when (id) {
@@ -74,11 +76,13 @@ class FormTaskFragment : BaseFragment() {
     }
 
     private fun setStatus() {
-        binding.rgStatus.check(when (task.status) {
-            Status.TODO -> R.id.rbTodo
-            Status.DOING -> R.id.rbDoing
-            else -> R.id.rbDone
-        })
+        binding.rgStatus.check(
+            when (task.status) {
+                Status.TODO -> R.id.rbTodo
+                Status.DOING -> R.id.rbDoing
+                else -> R.id.rbDone
+            }
+        )
     }
 
     private fun validateData() {
@@ -89,39 +93,31 @@ class FormTaskFragment : BaseFragment() {
             if (newTask) task = Task()
             task.description = description
             task.status = status
-            saveTask()
+
+            if (newTask) {
+                viewModel.insertTask(task)
+            } else {
+                 viewModel.updateTask(task)
+            }
         } else {
             showBottomSheet(message = getString(R.string.txt_description_empty))
         }
     }
 
-    private fun saveTask() {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getIdUser())
-            .child(task.id)
-            .setValue(task)
-            .addOnCompleteListener { result ->
-                if (result.isSuccessful) {
-                    Toast.makeText(requireContext(), R.string.txt_save_task, Toast.LENGTH_SHORT)
-                        .show()
-                    if (newTask) {
-                        findNavController().popBackStack()
-                    } else {
-                        binding.progressBarFormTask.isVisible = false
-                        viewModel.setUpdateTask(task)
-                    }
-                } else {
-                    binding.progressBarFormTask.isVisible = false
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.txt_error_save_task,
-                        Toast.LENGTH_SHORT
-                    ).show()
+    private fun observerViewModel() {
+        viewModel.taskInsert.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), R.string.txt_save_task, Toast.LENGTH_SHORT)
+                .show()
+            findNavController().popBackStack()
+        }
 
-                }
-            }
+        viewModel.taskUpdate.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), R.string.txt_update_task, Toast.LENGTH_SHORT)
+                .show()
+            binding.progressBarFormTask.isVisible = false
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
