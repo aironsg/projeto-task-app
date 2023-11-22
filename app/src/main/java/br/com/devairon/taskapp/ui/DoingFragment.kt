@@ -16,6 +16,7 @@ import br.com.devairon.taskapp.data.model.Task
 import br.com.devairon.taskapp.databinding.FragmentDoingBinding
 import br.com.devairon.taskapp.ui.adapter.TaskAdapter
 import br.com.devairon.taskapp.utils.FirebaseHelper
+import br.com.devairon.taskapp.utils.StateView
 import br.com.devairon.taskapp.utils.extension.showBottomSheet
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -48,20 +49,39 @@ class DoingFragment : Fragment() {
 
 
     private fun observerViewModel() {
-        viewModel.taskUpdate.observe(viewLifecycleOwner){ updateTask ->
-            if (updateTask.status == Status.DOING){
+        viewModel.taskUpdate.observe(viewLifecycleOwner){ stateView ->
 
-                val oldList = taskAdapter.currentList
-
-                val newList = oldList.toMutableList().apply {
-                    find { it.id == updateTask.id }?.description = updateTask.description
+            when (stateView) {
+                is StateView.onLoading -> {
+                    binding.progressBar.isVisible = true
                 }
 
-                val position = newList.indexOfFirst { it.id == updateTask.id }
+                is StateView.onSuccess -> {
+                    binding.progressBar.isVisible = false
+                    if (stateView.data?.status == Status.DOING){
 
-                taskAdapter.submitList(newList)
-                taskAdapter.notifyItemChanged(position)
+                        val oldList = taskAdapter.currentList
+
+                        val newList = oldList.toMutableList().apply {
+                            find { it.id == stateView.data.id }?.description = stateView.data.description
+                        }
+
+                        val position = newList.indexOfFirst { it.id == stateView.data.id }
+
+                        taskAdapter.submitList(newList)
+                        taskAdapter.notifyItemChanged(position)
+                    }
+                }
+
+                is StateView.onError -> {
+                    Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
+                    binding.progressBar.isVisible = false
+
+
+                }
             }
+
+
         }
     }
 

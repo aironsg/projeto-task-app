@@ -54,63 +54,114 @@ class TodoFragment : Fragment() {
 
     private fun observerViewModel() {
         viewModel.taskList.observe(viewLifecycleOwner) { stateView ->
-           when(stateView){
-               is StateView.onLoading ->{
-                   binding.progressBar.isVisible = true
-               }
-               is StateView.onSuccess -> {
-                   binding.progressBar.isVisible = false
-                   tasksListEmpty(stateView.data ?: emptyList() )
-                   taskAdapter.submitList(stateView.data)
-               }
-               is StateView.onError -> {
-                   Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
-                   binding.progressBar.isVisible = false
-
-
-               }
-           }
-        }
-        viewModel.taskInsert.observe(viewLifecycleOwner) { task ->
-            if (task.status == Status.TODO) {
-
-                val oldList = taskAdapter.currentList
-
-                val newList = oldList.toMutableList().apply {
-                    add(0, task)
+            when (stateView) {
+                is StateView.onLoading -> {
+                    binding.progressBar.isVisible = true
                 }
-                taskAdapter.submitList(newList)
-                setPositionRecyclerView()
 
+                is StateView.onSuccess -> {
+                    binding.progressBar.isVisible = false
+                    tasksListEmpty(stateView.data ?: emptyList())
+                    taskAdapter.submitList(stateView.data)
+                }
+
+                is StateView.onError -> {
+                    Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
+                    binding.progressBar.isVisible = false
+
+
+                }
+            }
+        }
+        viewModel.taskInsert.observe(viewLifecycleOwner) { stateView ->
+            when (stateView) {
+                is StateView.onLoading -> {
+                    binding.progressBar.isVisible = true
+                }
+
+                is StateView.onSuccess -> {
+                    binding.progressBar.isVisible = false
+                    if (stateView.data?.status == Status.TODO) {
+
+                        val oldList = taskAdapter.currentList
+
+                        val newList = oldList.toMutableList().apply {
+                            add(0, stateView.data)
+                        }
+                        taskAdapter.submitList(newList)
+                        setPositionRecyclerView()
+
+                    }
+                }
+
+                is StateView.onError -> {
+                    Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
+                    binding.progressBar.isVisible = false
+                }
+            }
+
+        }
+
+        viewModel.taskUpdate.observe(viewLifecycleOwner) { stateView ->
+
+            when (stateView) {
+                is StateView.onLoading -> {
+                    binding.progressBar.isVisible = true
+                }
+
+                is StateView.onSuccess -> {
+                    binding.progressBar.isVisible = false
+                    val oldList = taskAdapter.currentList
+
+                    val newList = oldList.toMutableList().apply {
+                        if (stateView.data?.status == Status.TODO) {
+                            find { it.id == stateView.data.id }?.description =
+                                stateView.data.description
+                        } else {
+                            remove(stateView.data)
+                        }
+                    }
+
+                    val position = newList.indexOfFirst { it.id == stateView.data?.id }
+
+                    taskAdapter.submitList(newList)
+                    taskAdapter.notifyItemChanged(position)
+                }
+
+                is StateView.onError -> {
+                    Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
+                    binding.progressBar.isVisible = false
+                }
             }
         }
 
-        viewModel.taskUpdate.observe(viewLifecycleOwner) { updateTask ->
-            val oldList = taskAdapter.currentList
+        viewModel.taskDelete.observe(viewLifecycleOwner) { stateView ->
+            when (stateView) {
+                is StateView.onLoading -> {
+                    binding.progressBar.isVisible = true
+                }
 
-            val newList = oldList.toMutableList().apply {
-                if (updateTask.status == Status.TODO) {
-                    find { it.id == updateTask.id }?.description = updateTask.description
-                } else {
-                    remove(updateTask)
+                is StateView.onSuccess -> {
+                    binding.progressBar.isVisible = false
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.txt_delete_tasks_success,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val oldList = taskAdapter.currentList
+                    val newList = oldList.toMutableList().apply { remove(stateView.data) }
+                    taskAdapter.submitList(newList)
+                }
+
+                is StateView.onError -> {
+                    Toast.makeText(requireContext(), stateView.message, Toast.LENGTH_SHORT).show()
+                    binding.progressBar.isVisible = false
+
+
                 }
             }
 
-            val position = newList.indexOfFirst { it.id == updateTask.id }
 
-            taskAdapter.submitList(newList)
-            taskAdapter.notifyItemChanged(position)
-        }
-
-        viewModel.taskDelete.observe(viewLifecycleOwner) { task ->
-            Toast.makeText(
-                requireContext(),
-                R.string.txt_delete_tasks_success,
-                Toast.LENGTH_SHORT
-            ).show()
-            val oldList = taskAdapter.currentList
-            val newList = oldList.toMutableList().apply { remove(task) }
-            taskAdapter.submitList(newList)
         }
     }
 

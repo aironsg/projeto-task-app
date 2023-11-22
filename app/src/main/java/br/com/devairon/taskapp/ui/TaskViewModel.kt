@@ -19,14 +19,14 @@ class TaskViewModel : ViewModel() {
     private val _taskList = MutableLiveData<StateView<List<Task>>>()
     val taskList: LiveData<StateView<List<Task>>> = _taskList
 
-    private val _taskInsert = MutableLiveData<Task>()
-    val taskInsert: LiveData<Task> = _taskInsert
+    private val _taskInsert = MutableLiveData<StateView<Task>>()
+    val taskInsert: LiveData<StateView<Task>> = _taskInsert
 
-    private val _taskUpdate = MutableLiveData<Task>()
-    val taskUpdate: LiveData<Task> = _taskUpdate
+    private val _taskUpdate = MutableLiveData<StateView<Task>>()
+    val taskUpdate: LiveData<StateView<Task>> = _taskUpdate
 
-    private val _taskDelete = MutableLiveData<Task>()
-    val taskDelete: LiveData<Task> = _taskDelete
+    private val _taskDelete = MutableLiveData<StateView<Task>>()
+    val taskDelete: LiveData<StateView<Task>> = _taskDelete
 
 
     fun getTasks(context: Context, status: Status) {
@@ -62,50 +62,63 @@ class TaskViewModel : ViewModel() {
 
     fun updateTask(task: Task) {
 
-        val map = mapOf(
-            "description" to task.description,
-            "status" to task.status
-        )
+        _taskUpdate.postValue(StateView.onLoading())
+        try {
+            val map = mapOf(
+                "description" to task.description,
+                "status" to task.status
+            )
 
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getIdUser())
-            .child(task.id)
-            .updateChildren(map)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    _taskUpdate.postValue(task)
+            FirebaseHelper.getDatabase()
+                .child("tasks")
+                .child(FirebaseHelper.getIdUser())
+                .child(task.id)
+                .updateChildren(map)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        _taskUpdate.postValue(StateView.onSuccess(task))
+                    }
                 }
-            }
+        } catch (ex: Exception) {
+            _taskUpdate.postValue(StateView.onError(ex.message.toString()))
+        }
     }
 
 
     fun insertTask(task: Task) {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getIdUser())
-            .child(task.id)
-            .setValue(task)
-            .addOnCompleteListener { result ->
-                if (result.isSuccessful) {
-                    _taskInsert.postValue(task)
-
-
+        try {
+            _taskInsert.postValue(StateView.onLoading())
+            FirebaseHelper.getDatabase()
+                .child("tasks")
+                .child(FirebaseHelper.getIdUser())
+                .child(task.id)
+                .setValue(task)
+                .addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        _taskInsert.postValue(StateView.onSuccess(task))
+                    }
                 }
-            }
+        } catch (ex: Exception) {
+            _taskInsert.postValue(StateView.onError(ex.message.toString()))
+        }
     }
 
     fun deleteTask(task: Task) {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getIdUser())
-            .child(task.id)
-            .removeValue().addOnCompleteListener { result ->
-                if (result.isSuccessful) {
-                    _taskDelete.postValue(task)
-
+        try {
+            _taskDelete.postValue(StateView.onLoading())
+            FirebaseHelper.getDatabase()
+                .child("tasks")
+                .child(FirebaseHelper.getIdUser())
+                .child(task.id)
+                .removeValue()
+                .addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        _taskDelete.postValue(StateView.onSuccess(task))
+                    }
                 }
-            }
+        } catch (ex: Exception) {
+            _taskDelete.postValue(StateView.onError(ex.message.toString()))
+        }
     }
 
 }
