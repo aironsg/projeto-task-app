@@ -16,16 +16,20 @@ import com.google.firebase.database.ValueEventListener
 class TaskViewModel : ViewModel() {
 
     private val _taskList = MutableLiveData<List<Task>>()
-    val taskList : LiveData<List<Task>> =  _taskList
+    val taskList: LiveData<List<Task>> = _taskList
 
     private val _taskInsert = MutableLiveData<Task>()
-    val taskInsert : LiveData<Task> =  _taskInsert
+    val taskInsert: LiveData<Task> = _taskInsert
 
-    private  val _taskUpdate = MutableLiveData<Task>()
-    val taskUpdate : LiveData<Task> = _taskUpdate
+    private val _taskUpdate = MutableLiveData<Task>()
+    val taskUpdate: LiveData<Task> = _taskUpdate
+
+    private val _taskDelete = MutableLiveData<Task>()
+    val taskDelete: LiveData<Task> = _taskDelete
 
 
-     fun getTasks(context: Context, status: Status) {
+
+    fun getTasks(context: Context, status: Status) {
         FirebaseHelper.getDatabase()
             .child("tasks")
             .child(FirebaseHelper.getIdUser())
@@ -34,13 +38,14 @@ class TaskViewModel : ViewModel() {
                     val taskList = mutableListOf<Task>()
                     for (ds in snapshot.children) {
                         val task = ds.getValue(Task::class.java) as Task
-                        if(task.status == status){
+                        if (task.status == status) {
                             taskList.add(task)
                         }
                     }
                     taskList.reverse()
                     _taskList.postValue(taskList)
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(context, R.string.txt_error_generic, Toast.LENGTH_SHORT)
                         .show()
@@ -49,7 +54,7 @@ class TaskViewModel : ViewModel() {
 
     }
 
-    fun updateTask(task: Task){
+    fun updateTask(task: Task) {
 
         val map = mapOf(
             "description" to task.description,
@@ -62,14 +67,14 @@ class TaskViewModel : ViewModel() {
             .child(task.id)
             .updateChildren(map)
             .addOnCompleteListener {
-                if(it.isSuccessful){
+                if (it.isSuccessful) {
                     _taskUpdate.postValue(task)
                 }
             }
     }
 
 
-     fun insertTask(task: Task) {
+    fun insertTask(task: Task) {
         FirebaseHelper.getDatabase()
             .child("tasks")
             .child(FirebaseHelper.getIdUser())
@@ -79,6 +84,19 @@ class TaskViewModel : ViewModel() {
                 if (result.isSuccessful) {
                     _taskInsert.postValue(task)
 
+
+                }
+            }
+    }
+
+    fun deleteTask(task: Task) {
+        FirebaseHelper.getDatabase()
+            .child("tasks")
+            .child(FirebaseHelper.getIdUser())
+            .child(task.id)
+            .removeValue().addOnCompleteListener { result ->
+                if (result.isSuccessful) {
+                    _taskDelete.postValue(task)
 
                 }
             }

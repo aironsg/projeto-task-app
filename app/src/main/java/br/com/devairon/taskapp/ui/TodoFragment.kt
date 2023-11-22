@@ -17,7 +17,6 @@ import br.com.devairon.taskapp.data.model.Status
 import br.com.devairon.taskapp.data.model.Task
 import br.com.devairon.taskapp.databinding.FragmentTodoBinding
 import br.com.devairon.taskapp.ui.adapter.TaskAdapter
-import br.com.devairon.taskapp.utils.FirebaseHelper
 import br.com.devairon.taskapp.utils.extension.showBottomSheet
 
 class TodoFragment : Fragment() {
@@ -76,17 +75,28 @@ class TodoFragment : Fragment() {
             val oldList = taskAdapter.currentList
 
             val newList = oldList.toMutableList().apply {
-               if(updateTask.status == Status.TODO) {
-                   find { it.id == updateTask.id }?.description = updateTask.description
-               }else{
-                   remove(updateTask)
-               }
+                if (updateTask.status == Status.TODO) {
+                    find { it.id == updateTask.id }?.description = updateTask.description
+                } else {
+                    remove(updateTask)
+                }
             }
 
             val position = newList.indexOfFirst { it.id == updateTask.id }
 
             taskAdapter.submitList(newList)
             taskAdapter.notifyItemChanged(position)
+        }
+
+        viewModel.taskDelete.observe(viewLifecycleOwner) { task ->
+            Toast.makeText(
+                requireContext(),
+                R.string.txt_delete_tasks_success,
+                Toast.LENGTH_SHORT
+            ).show()
+            val oldList = taskAdapter.currentList
+            val newList = oldList.toMutableList().apply { remove(task) }
+            taskAdapter.submitList(newList)
         }
     }
 
@@ -128,7 +138,7 @@ class TodoFragment : Fragment() {
                 showBottomSheet(
                     titleDialog = R.string.txt_info_delete_tasks,
                     message = getString(R.string.txt_confirm_delete_tasks),
-                    onclick = { deleteTask(task) }
+                    onclick = { viewModel.deleteTask(task) }
                 )
             }
 
@@ -154,31 +164,6 @@ class TodoFragment : Fragment() {
             }
         }
 
-    }
-
-    private fun deleteTask(task: Task) {
-        FirebaseHelper.getDatabase()
-            .child("tasks")
-            .child(FirebaseHelper.getIdUser())
-            .child(task.id)
-            .removeValue().addOnCompleteListener { result ->
-                if (result.isSuccessful) {
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.txt_delete_tasks_success,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    val oldList = taskAdapter.currentList
-                    val newList = oldList.toMutableList().apply { remove(task) }
-                    taskAdapter.submitList(newList)
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        R.string.txt_button_dialog_confirmation,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
     }
 
 
