@@ -85,7 +85,7 @@ Para mover uma tarefa de um status para outro, toque no botão "Mover tarefa" na
 
 ### Tela de Edição de Tarefas
 
-[Imagem da tela de Edição de Tarefas]
+![Imagem da tela de Edição de Tarefas](https://github.com/aironsg/projeto-task-app/blob/master/tela%20edicao.png)
 
 ### Tela de Criação de Novas Tarefas
 
