@@ -18,13 +18,20 @@ class LoginFragment : BaseFragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view = binding.root
-        return view
+
+        binding.editEmail.setOnFocusChangeListener{view, hasFocus ->
+            if (!hasFocus) {
+                hideKeyboard()
+            }
+        }
+       return view
 
     }
 
@@ -34,6 +41,7 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun initListener() {
+
         binding.btnLogin.setOnClickListener {
             validateData()
         }
@@ -45,6 +53,8 @@ class LoginFragment : BaseFragment() {
         binding.btnRecoverAccount.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_recoverAccountFragment)
         }
+
+
     }
 
 
