@@ -59,19 +59,29 @@ Para mover uma tarefa de um status para outro, toque no botão "Mover tarefa" na
 
 ### Tela Splash
 
-[Imagem da tela Splash]
+![Imagem da tela Splash](https://github.com/aironsg/projeto-task-app/blob/master/splashScreen.png)
 
 ### Tela de Login
 
-[Imagem da tela de Login]
+![Imagem da tela de Login](https://github.com/aironsg/projeto-task-app/blob/master/login.png)
 
 ### Tela Home
+![Imagem da tela Home](https://github.com/aironsg/projeto-task-app/blob/master/home.png)
 
-[Imagem da tela Home]
+### Tela Home-logout
+![Imagem da tela Home Logout](https://github.com/aironsg/projeto-task-app/blob/master/home-mensagem-logout.png)
+
+### Tela Home-Carregamento de dados
+
+![Imagem da tela Home-Carregamento de dados](https://github.com/aironsg/projeto-task-app/blob/master/carregamento%20de%20dados.png)
+
+### Tela de Criação de Conta
+
+![Imagem da tela de Criação de Conta](https://github.com/aironsg/projeto-task-app/blob/master/registro.png)
 
 ### Tela de Recuperação de Conta
 
-[Imagem da tela de Recuperação de Conta]
+![Imagem da tela de Recuperação de Conta](https://github.com/aironsg/projeto-task-app/blob/master/criar%20conta.png)
 
 ### Tela de Edição de Tarefas
 
@@ -79,7 +89,7 @@ Para mover uma tarefa de um status para outro, toque no botão "Mover tarefa" na
 
 ### Tela de Criação de Novas Tarefas
 
-[Imagem da tela de Criação de Novas Tarefas]
+![Imagem da tela de Criação de Novas Tarefas](https://github.com/aironsg/projeto-task-app/blob/master/cadastro-tarefas.png)
 
 ## Contribuições
 
